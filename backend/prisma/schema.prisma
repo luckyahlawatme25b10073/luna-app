@@ -1,0 +1,72 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+}
+
+
+model User {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  passwordHash  String
+  name          String?
+  profilePhoto  String?
+  cycleLength   Int      @default(28)
+  periodLength  Int      @default(5)
+  lastPeriodStart DateTime?
+  anniversary   DateTime?
+  lovePin       String?   // 4-digit PIN for love section
+  apiKey        String?   // Encrypted API key for Anthropic (store encrypted in production)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  cycles        Cycle[]   @relation("UserCycles")
+  logs          DailyLog[] @relation("UserLogs")
+  settings      Settings? @relation("UserSettings")
+}
+
+model DailyLog {
+  id            String   @id @default(uuid())
+  userId        String
+  user          User     @relation("UserLogs", fields: [userId], references: [id])
+  date          DateTime @unique
+  flow          Int      // 0: no flow, 1: light, 2: medium, 3: heavy, 4: very heavy
+  mood          String   // e.g., HAPPY, NEUTRAL, SAD, ANXIOUS, EXCITED, TIRED
+  symptoms      String   @default("[]")
+  energy        Int      @default(3) // 1-5
+  pain          Int      @default(0) // 0-5
+  weight        Float?   // in kg or lbs, user's preference
+  sleep         Float?   // hours
+  temperature   Float?   // basal body temperature
+  notes         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime  @updatedAt
+  @@unique([userId, date])
+}
+
+model Cycle {
+  id            String   @id @default(uuid())
+  userId        String
+  user          User     @relation("UserCycles", fields: [userId], references: [id])
+  startDate     DateTime
+  endDate       DateTime?
+  length        Int?     // length of the cycle in days
+  notes         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([userId])
+}
+
+model Settings {
+  id            String   @id @default(uuid())
+  userId        String
+  user          User     @relation("UserSettings", fields: [userId], references: [id])
+  theme         String   @default("light")
+  notifications String   @default("{}") // JSON string { "reminders": true, ... }
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime  @updatedAt
+  @@unique([userId])
+}

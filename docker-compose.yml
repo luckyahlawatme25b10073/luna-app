@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+  # Backend Node.js/Express API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/luna?schema=public
+      - REDIS_URL=redis://redis:6379
+      - JWT_SECRET=your-super-secret-jwt-key-change-in-production
+      - NODE_ENV=development
+      - FRONTEND_URL=http://localhost:3000
+      - ANTHROPIC_API_KEY=your_anthropic_api_key_here
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    depends_on:
+      - db
+      - redis
+    networks:
+      - luna-network
+
+  # Frontend Next.js app
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://backend:5000/api
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+    networks:
+      - luna-network
+
+  # PostgreSQL database
+  db:
+    image: postgres:15
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=luna
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - luna-network
+
+  # Redis for caching and rate limiting
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - luna-network
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  luna-network:
+    driver: bridge

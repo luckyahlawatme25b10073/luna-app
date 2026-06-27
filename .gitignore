@@ -1,0 +1,16 @@
+# Root
+node_modules/
+.env
+.env.local
+.env.production.local
+.env.development.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo

@@ -1,0 +1,277 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: #FFF5F7;
+    --bg: #FFF5F7;
+    --foreground: #2D1B35;
+    --pink-primary: #F8BBD0;
+    --pink-secondary: #F48FB1;
+    --green-accent: #A8C5A0;
+    --surface: rgba(255, 255, 255, 0.45);
+    --border: rgba(255, 255, 255, 0.5);
+    --glass-border: rgba(255, 255, 255, 0.35);
+    --text-dark: #1A0A22;
+    --text-medium: #6B4C7A;
+    --text-light: #B89DC4;
+    --muted-foreground: #8B6B7A;
+    --shadow-pink: 0 10px 40px rgba(244, 143, 177, 0.15);
+    --radius: 32px;
+    --font-headings: 'Space Grotesk', sans-serif;
+    --font-body: 'Plus Jakarta Sans', sans-serif;
+    --font-accent: 'Playfair Display', serif;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--foreground);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-headings);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  ::selection {
+    background: #F8BBD0;
+    color: #2D1B35;
+  }
+
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #F48FB1;
+    border-radius: 2px;
+  }
+}
+
+@layer components {
+  .glass-card {
+    background: rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(24px) saturate(1.8);
+    -webkit-backdrop-filter: blur(24px) saturate(1.8);
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    border-radius: 32px;
+    box-shadow: 
+      0 4px 30px rgba(0, 0, 0, 0.015),
+      0 1px 3px rgba(244, 143, 177, 0.04),
+      inset 0 1px 0 rgba(255, 255, 255, 0.65);
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .glass-card:hover {
+    background: rgba(255, 255, 255, 0.58);
+    border-color: rgba(255, 255, 255, 0.75);
+    transform: translateY(-3px) scale(1.005);
+    box-shadow: 
+      0 20px 40px rgba(244, 143, 177, 0.08),
+      0 1px 4px rgba(244, 143, 177, 0.04),
+      inset 0 1px 0 rgba(255, 255, 255, 0.85);
+  }
+
+  .glass-nav {
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(30px) saturate(1.8);
+    -webkit-backdrop-filter: blur(30px) saturate(1.8);
+    border-top: 1px solid rgba(255, 255, 255, 0.45);
+    box-shadow: 0 -8px 32px rgba(180, 100, 150, 0.06);
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #F48FB1, #F06292);
+    color: white;
+    border: none;
+    border-radius: 999px;
+    padding: 12px 28px;
+    font-weight: 600;
+    font-family: var(--font-headings);
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(244, 143, 177, 0.3);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(244, 143, 177, 0.45);
+    filter: brightness(1.05);
+  }
+
+  .phase-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    backdrop-filter: blur(10px);
+  }
+
+  .gradient-text {
+    background: linear-gradient(135deg, #F48FB1, #E91E8C);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+@layer utilities {
+  .font-headings {
+    font-family: var(--font-headings);
+  }
+  .font-body {
+    font-family: var(--font-body);
+  }
+  .font-accent {
+    font-family: var(--font-accent);
+  }
+
+  .mesh-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -10;
+    background-color: #FFF5F7;
+    background-image: 
+      radial-gradient(at 10% 20%, rgba(248, 187, 208, 0.35) 0px, transparent 50%),
+      radial-gradient(at 90% 10%, rgba(225, 190, 231, 0.4) 0px, transparent 50%),
+      radial-gradient(at 50% 80%, rgba(187, 222, 251, 0.25) 0px, transparent 50%),
+      radial-gradient(at 80% 90%, rgba(244, 143, 177, 0.3) 0px, transparent 50%),
+      radial-gradient(at 20% 85%, rgba(224, 242, 241, 0.35) 0px, transparent 50%);
+    background-size: 200% 200%;
+    animation: aurora 20s ease infinite;
+    overflow: hidden;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Animations */
+@keyframes blobAnimation {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes aurora {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200px 0; }
+  100% { background-position: calc(200px + 100%) 0; }
+}
+
+.animate-blob {
+  animation: blobAnimation 15s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease both;
+}
+
+/* Skeleton loading */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(248, 187, 208, 0.2) 25%,
+    rgba(248, 187, 208, 0.4) 50%,
+    rgba(248, 187, 208, 0.2) 75%
+  );
+  background-size: 200px 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 12px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
