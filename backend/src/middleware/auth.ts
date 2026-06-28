@@ -21,6 +21,9 @@ export const authenticate = async (
   next: NextFunction
 ) => {
   try {
+    console.log('[Auth Middleware] Headers:', JSON.stringify(req.headers));
+    console.log('[Auth Middleware] Cookies:', JSON.stringify(req.cookies));
+
     // Get token from cookies or Authorization header
     let token = req.cookies?.token;
 
