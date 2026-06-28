@@ -2,6 +2,11 @@
 
 A beautiful, feature-rich period tracking application built with love as a gift from boyfriend to girlfriend. Luna combines modern technology with thoughtful design to provide a comprehensive cycle tracking experience.
 
+## Live Deployment
+
+You can access the live deployed version of the application here:
+👉 **[Luna 🌙 - Live App](https://luna-app-frontend.vercel.app/login)**
+
 ## Features
 
 - **Cycle Tracking**: Log periods, symptoms, moods, and flow intensity
