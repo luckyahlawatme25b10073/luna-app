@@ -1,12 +1,27 @@
 'use client';
 
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient, keepPreviousData } from '@tanstack/react-query';
 import { apiFetch } from '@/lib/api';
+
+export interface User {
+  id: string;
+  email: string;
+  name?: string | null;
+  profilePhoto?: string | null;
+  cycleLength: number;
+  periodLength: number;
+  lastPeriodStart?: string | null;
+  anniversary?: string | null;
+  lovePin?: string | null;
+  apiKey?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
 
 export const useUserData = () => {
   const queryClient = useQueryClient();
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading } = useQuery<User | null>({
     queryKey: ['userData'],
     queryFn: async () => {
       try {
@@ -15,7 +30,7 @@ export const useUserData = () => {
         if (user) {
           // Always write fresh server data to localStorage
           localStorage.setItem('userData', JSON.stringify(user));
-          return user;
+          return user as User;
         }
       } catch (err) {
         console.warn('Failed to fetch user data from server, falling back to cache:', err);
@@ -25,7 +40,7 @@ export const useUserData = () => {
       const saved = localStorage.getItem('userData');
       if (saved) {
         try {
-          return JSON.parse(saved);
+          return JSON.parse(saved) as User;
         } catch {
           // ignore parsing error
         }
@@ -37,16 +52,16 @@ export const useUserData = () => {
     // Always refetch on mount so login always loads fresh data from DB
     staleTime: 0,
     // Keep previous data while refetching so UI doesn't flash
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
   });
 
-  const updateUserData = (newData: Partial<any>) => {
-    queryClient.setQueryData(['userData'], (prev: any) => {
-      const updated = { ...(prev || {}), ...newData };
+  const updateUserData = (newData: Partial<User>) => {
+    queryClient.setQueryData<User | null>(['userData'], (prev) => {
+      const updated = { ...(prev || {}), ...newData } as User;
       localStorage.setItem('userData', JSON.stringify(updated));
       return updated;
     });
   };
 
-  return { data: data ?? null, updateUserData, loading: isLoading };
+  return { data: (data ?? null) as User | null, updateUserData, loading: isLoading };
 };

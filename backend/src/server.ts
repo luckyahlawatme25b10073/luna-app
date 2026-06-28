@@ -81,48 +81,50 @@ app.use(notFoundHandler);
 // Global error handler
 app.use(errorHandler);
 
-// Graceful shutdown
-const shutdown = async (signal: string) => {
-  console.log(`\nReceived ${signal}. Shutting down gracefully...`);
-
-  server.close(async (err) => {
-    if (err) {
-      console.error('Error during shutdown:', err);
-      process.exit(1);
-    }
-
-    // Close database connections
-    await prisma.$disconnect();
-
-    // Close Redis connection if available
-    if (redis) {
-      await redis.quit().catch(() => {});
-    }
-
-    console.log('Process terminated');
-    process.exit(0);
+// Start server (only if not running on Vercel serverless)
+if (!process.env.VERCEL) {
+  const server = app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+    console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
   });
-};
 
-// Handle termination signals
-process.on('SIGINT', () => shutdown('SIGINT'));
-process.on('SIGTERM', () => shutdown('SIGTERM'));
+  // Graceful shutdown
+  const shutdown = async (signal: string) => {
+    console.log(`\nReceived ${signal}. Shutting down gracefully...`);
 
-// Start server
-const server = app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
-});
+    server.close(async (err) => {
+      if (err) {
+        console.error('Error during shutdown:', err);
+        process.exit(1);
+      }
 
-// Handle unhandled promises
-process.on('unhandledRejection', (reason, promise) => {
-  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
-});
+      // Close database connections
+      await prisma.$disconnect();
 
-// Handle uncaught exceptions
-process.on('uncaughtException', (error) => {
-  console.error('Uncaught Exception:', error);
-  process.exit(1);
-});
+      // Close Redis connection if available
+      if (redis) {
+        await redis.quit().catch(() => {});
+      }
+
+      console.log('Process terminated');
+      process.exit(0);
+    });
+  };
+
+  // Handle termination signals
+  process.on('SIGINT', () => shutdown('SIGINT'));
+  process.on('SIGTERM', () => shutdown('SIGTERM'));
+
+  // Handle unhandled promises
+  process.on('unhandledRejection', (reason, promise) => {
+    console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+  });
+
+  // Handle uncaught exceptions
+  process.on('uncaughtException', (error) => {
+    console.error('Uncaught Exception:', error);
+    process.exit(1);
+  });
+}
 
 export default app;
