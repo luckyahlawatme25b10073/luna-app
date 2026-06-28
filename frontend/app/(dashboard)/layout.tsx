@@ -26,6 +26,7 @@ export default function DashboardLayout({
       } catch (err) {
         console.error('Auth verification failed, redirecting to login:', err);
         localStorage.removeItem('userData');
+        localStorage.removeItem('token');
         router.push('/login');
       }
     };

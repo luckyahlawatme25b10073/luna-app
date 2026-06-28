@@ -237,6 +237,7 @@ export default function SettingsForm() {
       // Always clear all local storage keys and redirect
       localStorage.removeItem('userData');
       localStorage.removeItem('userSettings');
+      localStorage.removeItem('token');
       window.location.href = '/login';
     }
   };
@@ -246,6 +247,7 @@ export default function SettingsForm() {
       // Clear localStorage
       localStorage.removeItem('userData');
       localStorage.removeItem('userSettings');
+      localStorage.removeItem('token');
       localStorage.removeItem('loveReasons');
       localStorage.removeItem('loveOccasions');
       localStorage.removeItem('loveCompliments');

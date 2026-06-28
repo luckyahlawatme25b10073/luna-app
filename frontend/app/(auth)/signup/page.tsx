@@ -41,6 +41,9 @@ export default function SignupPage() {
 
       if (response && response.user) {
         localStorage.setItem('userData', JSON.stringify(response.user));
+        if (response.token) {
+          localStorage.setItem('token', response.token);
+        }
       }
 
       router.push('/home');
